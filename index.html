@@ -51,9 +51,10 @@
             if (content) {
                 // 假设这是从Python端获取的Base64编码的压缩数据
                 var base64EncodedCompressedData = content // 替换为您的Base64字符串
-
                 // 输出解压后的数据
                 document.getElementById('content').textContent = decompressString(base64EncodedCompressedData);
+                // 使用Prism手动高亮元素
+                Prism.highlightElement(document.getElementById('content'));
             }
         }
 
