@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Display Content</title>
-    <script src="https://unpkg.com/bzip2@0.1.1/bzip2.js"></script>
+    <script src="https://unpkg.com/jszip@3.10.1/lib/index.js"></script>
 </head>
 <body>
     <h1>通过访问带content参数的本项目url来显示内容</h1>
@@ -25,7 +25,7 @@
                 }
 
                 // 使用js-bzip库解压缩数据
-                var decompressedArray = bzip2.decompress(compressedArray);
+                var decompressedArray = Bzip2.decompress(compressedArray);
 
                 // 将解压后的二进制数据转换为字符串
                 var decompressedString = String.fromCharCode.apply(null, decompressedArray);
