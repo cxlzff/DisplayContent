@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Content</title>
+</head>
+<body>
+    <h1>展示内容</h1>
+    <div id="content"></div>
+
+    <script>
+        function getContentFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            const content = params.get('content'); // 获取名为 'content' 的参数值
+            if (content) {
+                document.getElementById('content').textContent = content;
+            }
+        }
+
+        // 当页面加载完毕后，获取并展示内容
+        window.onload = getContentFromUrl;
+    </script>
+</body>
+</html>
