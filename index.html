@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-bzip/0.2.0/js-bzip.min.js"></script>
     <title>Display Content</title>
 </head>
 <body>
-    <h1>展示内容</h1>
+    <h1>通过访问带content参数的本项目url来显示内容</h1>
     <div id="content"></div>
 
     <script>
@@ -14,6 +15,23 @@
             const params = new URLSearchParams(window.location.search);
             const content = params.get('content'); // 获取名为 'content' 的参数值
             if (content) {
+                // 假设这是从Python端获取的Base64编码的压缩数据
+                var base64EncodedCompressedData = content // 替换为您的Base64字符串
+                // 将Base64字符串解码为二进制数据
+                var binaryString = atob(base64EncodedCompressedData);
+                var compressedArray = new Uint8Array(binaryString.length);
+                for (var i = 0; i < binaryString.length; i++) {
+                    compressedArray[i] = binaryString.charCodeAt(i);
+                }
+
+                // 使用js-bzip库解压缩数据
+                var decompressedArray = Bzip2.decompress(compressedArray);
+
+                // 将解压后的二进制数据转换为字符串
+                var decompressedString = String.fromCharCode.apply(null, decompressedArray);
+
+                // 输出解压后的数据
+
                 document.getElementById('content').textContent = content;
             }
         }
