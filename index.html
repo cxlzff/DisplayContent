@@ -32,9 +32,20 @@
             var decompressedString = new TextDecoder().decode(decompressed);
             return decompressedString;
         }
+
+        function getBase64ContentFromUrl(url) {
+            // 使用正则表达式匹配 'content' 参数
+            const regex = /(?:\?|&)(content=)([^&]+)/;
+            const match = url.match(regex);
+            if (match && match[2]) {
+                // 将编码的 '+' 替换回原始的 '+'
+                return match[2].replace(/%2B/g, '+');
+            }
+            return null; // 如果没有匹配到，返回 null
+        }
+
         function getContentFromUrl() {
-            const params = new URLSearchParams(window.location.search);
-            const content = params.get('content'); // 获取名为 'content' 的参数值
+            const content = getBase64ContentFromUrl(window.location.search);
             if (content) {
                 // 假设这是从Python端获取的Base64编码的压缩数据
                 var base64EncodedCompressedData = content // 替换为您的Base64字符串
