@@ -11,28 +11,36 @@
     <div id="content"></div>
 
     <script>
+        // 压缩字符串
+        function compressString(str) {
+            // 将字符串转换为Uint8Array
+            var input = new TextEncoder().encode(str);
+            // 使用pako进行压缩
+            var compressed = pako.deflate(input);
+            // 将压缩后的数据转换为Base64字符串
+            var compressedBase64 = btoa(String.fromCharCode(...compressed));
+            return compressedBase64;
+        }
+
+        // 解压缩字符串
+        function decompressString(compressedBase64) {
+            // 将Base64字符串转换为Uint8Array
+            var compressed = Uint8Array.from(atob(compressedBase64), c => c.charCodeAt(0));
+            // 使用pako进行解压缩
+            var decompressed = pako.inflate(compressed);
+            // 将Uint8Array转换回字符串
+            var decompressedString = new TextDecoder().decode(decompressed);
+            return decompressedString;
+        }
         function getContentFromUrl() {
             const params = new URLSearchParams(window.location.search);
             const content = params.get('content'); // 获取名为 'content' 的参数值
             if (content) {
                 // 假设这是从Python端获取的Base64编码的压缩数据
                 var base64EncodedCompressedData = content // 替换为您的Base64字符串
-                // 将Base64字符串解码为二进制数据
-                var binaryString = atob(base64EncodedCompressedData);
-                var compressedArray = new Uint8Array(binaryString.length);
-                for (var i = 0; i < binaryString.length; i++) {
-                    compressedArray[i] = binaryString.charCodeAt(i);
-                }
-
-                // 使用js-bzip库解压缩数据
-                var decompressedArray = Bzip2.decompress(compressedArray);
-
-                // 将解压后的二进制数据转换为字符串
-                var decompressedString = String.fromCharCode.apply(null, decompressedArray);
 
                 // 输出解压后的数据
-
-                document.getElementById('content').textContent = content;
+                document.getElementById('content').textContent = decompressString(compressedBase64);
             }
         }
 
