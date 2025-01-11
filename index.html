@@ -9,14 +9,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/components/prism-python.min.js"></script>
     <style>
-        @media (max-width: 600px) {
-            pre[class*="language-"] {
-                width: 100%;
-                height: 100%;
-                overflow-x: auto;
-                overflow-y: auto;
-                white-space: pre-wrap; /* 保持空白符和换行符 */
-            }
+        pre[class*="language-"], pre {
+            max-height: none; /* 确保没有设置最大高度 */
+            overflow: auto; /* 或者使用 'auto' 允许滚动 */
         }
     </style>
 </head>
