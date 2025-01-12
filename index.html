@@ -8,9 +8,11 @@
     <script src="https://cdn.jsdelivr.net/npm/pako@1.0.11/dist/pako.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/plugins/markdown/prism-markdown.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/showdown@1.9.1/dist/showdown.min.js"></script>
 </head>
 <body>
-    <h1>通过访问带content参数的本项目url来显示内容</h1>
+    <pre><code id="readme" class="language-markdown"></code></pre>
     <pre><code id="content" class="language-python"></code></pre>
     <script>
         // 压缩字符串
@@ -26,8 +28,14 @@
 
         // 解压缩字符串
         function decompressString(compressedBase64) {
-            // 将Base64字符串转换为Uint8Array
-            var compressed = Uint8Array.from(atob(compressedBase64), c => c.charCodeAt(0));
+            try {
+                // 将Base64字符串转换为Uint8Array
+                var compressed = Uint8Array.from(atob(compressedBase64), c => c.charCodeAt(0));
+            } catch (error) {
+                console.error('Error occurred:', error);
+                return compressedBase64;
+            }
+
             // 使用pako进行解压缩
             var decompressed = pako.inflate(compressed);
             // 将Uint8Array转换回字符串
@@ -49,12 +57,29 @@
         function getContentFromUrl() {
             const content = getBase64ContentFromUrl(window.location.search);
             if (content) {
+                var element = document.getElementById('readme');
+                element.style.display = 'none';
+
                 // 假设这是从Python端获取的Base64编码的压缩数据
                 var base64EncodedCompressedData = content // 替换为您的Base64字符串
                 // 输出解压后的数据
                 document.getElementById('content').textContent = decompressString(base64EncodedCompressedData);
                 // 使用Prism手动高亮元素
                 Prism.highlightElement(document.getElementById('content'));
+            }else{
+                var element = document.getElementById('content');
+                element.style.display = 'none';
+
+                fetch('https://raw.githubusercontent.com/JuneWaySue/DisplayContent/refs/heads/master/README.md')
+                    .then(response => response.text())
+                    .then(data => {
+                        document.getElementById('readme').textContent = data;
+                        // 使用 Showdown.js 将 Markdown 转换为 HTML
+                        const converter = new showdown.Converter();
+                        const htmlContent = converter.makeHtml(data);
+                        // 渲染到页面
+                        document.getElementById('readme').innerHTML = htmlContent;
+                    });
             }
         }
 
