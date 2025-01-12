@@ -20,14 +20,23 @@
             border-radius: 50%;
             width: 40px;
             height: 40px;
-            animation: spin 2s linear infinite;
+            animation: spin 1.5s linear infinite;
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             display: none; /* 默认不显示 */
         }
-
+        /* 文字样式 */
+        .loadingText {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-5%, 50%); /* 70% 是相对于加载指示器位置的偏移量 */
+            font-size: 16px;
+            color: #333;
+            display: none; /* 默认不显示 */
+        }
         /* 加载指示器的动画 */
         @keyframes spin {
             0% { transform: rotate(0deg); }
@@ -37,6 +46,8 @@
 </head>
 <body>
     <h1 id="title">Display Content</h1>
+    <div id="loader" class="loader"></div>
+    <div id="loadingText" class="loadingText">loading</div>
     <script>
         // 压缩字符串
         function compressString(str) {
@@ -78,17 +89,15 @@
             return null; // 如果没有匹配到，返回 null
         }
 
-        // 获取加载指示器的 DOM 元素
-        var divElement = document.createElement('div');
-        divElement.id = 'loader'
-        document.body.appendChild(divElement);
         // 显示加载指示器
         function showLoader() {
             loader.style.display = 'block';
+            loadingText.style.display = 'block';
         }
         // 隐藏加载指示器
         function hideLoader() {
             loader.style.display = 'none';
+            loadingText.style.display = 'none';
         }
 
         function getContentFromUrl() {
