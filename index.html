@@ -13,6 +13,26 @@
         h1[id*="title"] {
             text-align: center;
         }
+        /* 加载指示器的样式 */
+        .loader {
+            border: 5px solid #f3f3f3; /* Light grey */
+            border-top: 5px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 2s linear infinite;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none; /* 默认不显示 */
+        }
+
+        /* 加载指示器的动画 */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -58,7 +78,24 @@
             return null; // 如果没有匹配到，返回 null
         }
 
+        // 获取加载指示器的 DOM 元素
+        var divElement = document.createElement('div');
+        divElement.id = 'loader'
+        divElement.className = 'loader'
+        document.body.appendChild(divElement);
+        // 显示加载指示器
+        function showLoader() {
+            loader.style.display = 'block';
+        }
+        // 隐藏加载指示器
+        function hideLoader() {
+            loader.style.display = 'none';
+        }
+
         function getContentFromUrl() {
+            // 在请求开始之前显示加载指示器
+            showLoader();
+
             const content = getBase64ContentFromUrl(window.location.search);
             if (content) {
                 // 假设这是从Python端获取的Base64编码的压缩数据
@@ -69,7 +106,9 @@
                 var codeElement = document.createElement('code');
 
                 // 输出解压后的数据
-                codeElement.innerHTML = decompressString(base64EncodedCompressedData);
+                var result = decompressString(base64EncodedCompressedData);
+                hideLoader();
+                codeElement.innerHTML = result;
                 codeElement.className = 'language-python';
                 preElement.appendChild(codeElement);
                 document.body.appendChild(preElement);
@@ -77,23 +116,30 @@
                 // 使用Prism手动高亮元素
                 Prism.highlightElement(codeElement);
             }else{
+                function readme(data) {
+                    const md = window.markdownit();
+                    // 假设这是你想要渲染的 Markdown 文本
+                    const markdownText = data;
+                    // 渲染 Markdown 并将其插入到页面中
+                    const result = md.render(markdownText);
+
+                    // 创建 pre 和 code 元素
+                    var preElement = document.createElement('pre');
+                    var codeElement = document.createElement('code');
+
+                    hideLoader();
+                    codeElement.innerHTML = result;
+                    codeElement.className = 'language-markdown';
+                    preElement.appendChild(codeElement);
+                    document.body.appendChild(preElement);
+                }
+
                 fetch('https://raw.githubusercontent.com/JuneWaySue/DisplayContent/refs/heads/master/README.md')
                     .then(response => response.text())
-                    .then(data => {
-                        const md = window.markdownit();
-                        // 假设这是你想要渲染的 Markdown 文本
-                        const markdownText = data;
-                        // 渲染 Markdown 并将其插入到页面中
-                        const result = md.render(markdownText);
-
-                        // 创建 pre 和 code 元素
-                        var preElement = document.createElement('pre');
-                        var codeElement = document.createElement('code');
-
-                        codeElement.innerHTML = result;
-                        codeElement.className = 'language-markdown';
-                        preElement.appendChild(codeElement);
-                        document.body.appendChild(preElement);
+                    .then(data => readme(data))
+                    .catch(error => {
+                        console.log('Error:', error);
+                        readme('获取README.md文件内容失败！')
                     });
             }
         }
