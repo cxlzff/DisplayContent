@@ -8,16 +8,10 @@
     <script src="https://cdn.jsdelivr.net/npm/pako@1.0.11/dist/pako.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/components/prism-python.min.js"></script>
-    <style>
-        pre[class*="language-"], pre {
-            max-height: none; /* 确保没有设置最大高度 */
-            overflow: auto; /* 或者使用 'auto' 允许滚动 */
-        }
-    </style>
 </head>
 <body>
     <h1>通过访问带content参数的本项目url来显示内容</h1>
-    <div id="content"></div>
+    <pre><code id="content" class="language-python"></code></pre>
     <script>
         // 压缩字符串
         function compressString(str) {
@@ -60,7 +54,7 @@
                 // 输出解压后的数据
                 document.getElementById('content').textContent = decompressString(base64EncodedCompressedData);
                 // 使用Prism手动高亮元素
-                //Prism.highlightElement(document.getElementById('content'));
+                Prism.highlightElement(document.getElementById('content'));
             }
         }
 
