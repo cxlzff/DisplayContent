@@ -54,8 +54,9 @@
             const regex = /(?:\?|&)(content=)([^&]+)/;
             const match = url.match(regex);
             if (match && match[2]) {
-                // 将编码的 '+' 替换回原始的 '+'
-                return match[2].replace(/%2B/g, '+');
+                // 将编码的 '+' 替换回原始的 '+' 并且还原url
+                return decodeURIComponent(match[2].replace(/%2B/g, '+'))
+                
             }
             return null; // 如果没有匹配到，返回 null
         }
