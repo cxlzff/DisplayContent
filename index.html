@@ -10,8 +10,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/components/prism-python.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/plugins/markdown/prism-markdown.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/showdown@1.9.1/dist/showdown.min.js"></script>
+    <style>
+        h1[class*="me"] {
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
+    <h1 class="me">七里香还是稻香</h1>
     <pre><code id="readme" class="language-markdown"></code></pre>
     <pre><code id="content" class="language-python"></code></pre>
     <script>
@@ -32,7 +38,7 @@
                 // 将Base64字符串转换为Uint8Array
                 var compressed = Uint8Array.from(atob(compressedBase64), c => c.charCodeAt(0));
             } catch (error) {
-                console.error('Error occurred:', error);
+                console.log('Error occurred:', error);
                 return compressedBase64;
             }
 
@@ -57,7 +63,7 @@
         function getContentFromUrl() {
             const content = getBase64ContentFromUrl(window.location.search);
             if (content) {
-                var element = document.getElementById('readme');
+                var element = document.getElementById('readme').parentElement;
                 element.style.display = 'none';
 
                 // 假设这是从Python端获取的Base64编码的压缩数据
@@ -67,7 +73,7 @@
                 // 使用Prism手动高亮元素
                 Prism.highlightElement(document.getElementById('content'));
             }else{
-                var element = document.getElementById('content');
+                var element = document.getElementById('content').parentElement;
                 element.style.display = 'none';
 
                 fetch('https://raw.githubusercontent.com/JuneWaySue/DisplayContent/refs/heads/master/README.md')
