@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Display Content</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/themes/prism.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/pako@1.0.11/dist/pako.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/components/prism-python.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/markdown-it@12.3.2/dist/markdown-it.min.js"></script>
+    <link rel="stylesheet" href="src/prism.min.css">
+    <script src="src/pako.min.js"></script>
+    <script src="src/prism.min.js"></script>
+    <script src="src/prism-python.min.js"></script>
+    <script src="src/markdown-it.min.js"></script>
     <style>
         h1[id*="title"] {
             text-align: center;
@@ -81,7 +81,6 @@
         // 获取加载指示器的 DOM 元素
         var divElement = document.createElement('div');
         divElement.id = 'loader'
-        divElement.className = 'loader'
         document.body.appendChild(divElement);
         // 显示加载指示器
         function showLoader() {
@@ -139,7 +138,7 @@
                     .then(data => readme(data))
                     .catch(error => {
                         console.log('Error:', error);
-                        readme('获取README.md文件内容失败！')
+                        readme('## 获取README.md文件内容失败！')
                     });
             }
         }
