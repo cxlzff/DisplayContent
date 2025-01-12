@@ -8,8 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/pako@1.0.11/dist/pako.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/components/prism-python.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/plugins/markdown/prism-markdown.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/showdown@1.9.1/dist/showdown.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it@12.3.2/dist/markdown-it.min.js"></script>
     <style>
         h1[id*="title"] {
             text-align: center;
@@ -80,12 +79,12 @@
                 fetch('https://raw.githubusercontent.com/JuneWaySue/DisplayContent/refs/heads/master/README.md')
                     .then(response => response.text())
                     .then(data => {
-                        document.getElementById('readme').textContent = data;
-                        // 使用 Showdown.js 将 Markdown 转换为 HTML
-                        const converter = new showdown.Converter();
-                        const htmlContent = converter.makeHtml(data);
-                        // 渲染到页面
-                        document.getElementById('readme').innerHTML = htmlContent;
+                        const md = window.markdownit();
+                        // 假设这是你想要渲染的 Markdown 文本
+                        const markdownText = data;
+                        // 渲染 Markdown 并将其插入到页面中
+                        const result = md.render(markdownText);
+                        document.getElementById('readme').innerHTML = result;
                     });
             }
         }
