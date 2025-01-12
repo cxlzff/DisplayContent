@@ -11,7 +11,7 @@
 - 当然，如果不这样传，而是直接传原文也是可以的
 - **不管怎么传，都是有字符限制的**
 
-### 关注我（Follow me）
+### 关于我（About me）
 - blog：[待完成]()
 - wechat： **[Python王者之路](https://user-images.githubusercontent.com/45711125/234814025-af439d36-d595-434d-bb51-e138b0c7738d.jpg)**
 - csdn：**[七里香还是稻香](https://blog.csdn.net/sinat_39629323)**
