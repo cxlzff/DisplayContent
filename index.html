@@ -136,10 +136,12 @@
                     var codeElement = document.createElement('code');
 
                     hideLoader();
-                    codeElement.innerHTML = result;
                     codeElement.className = 'language-markdown';
                     preElement.appendChild(codeElement);
                     document.body.appendChild(preElement);
+                    // 使用Prism手动高亮元素
+                    Prism.highlightElement(codeElement);
+                    codeElement.innerHTML = result;
                 }
 
                 fetch('https://raw.githubusercontent.com/JuneWaySue/DisplayContent/refs/heads/master/README.md')
