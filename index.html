@@ -67,12 +67,21 @@
                 // 将Base64字符串转换为Uint8Array
                 var compressed = Uint8Array.from(atob(compressedBase64), c => c.charCodeAt(0));
             } catch (error) {
-                console.log('Error occurred:', error);
+                console.log('Base64 error:', error);
+                // 不是Base64字符串，直接返回原文本
                 return compressedBase64;
             }
-
-            // 使用pako进行解压缩
-            var decompressed = pako.inflate(compressed);
+            
+            try {
+                // 使用pako进行解压缩
+                var decompressed = pako.inflate(compressed);
+            } catch (error) {
+                console.log('pako error:', error);
+                // 不符合pako的字符串，将Uint8Array还原回原文本，再返回
+                var original_content = decodeURIComponent(escape(atob(btoa(String.fromCharCode.apply(null, compressed)))));
+                return original_content
+            }
+            
             // 将Uint8Array转换回字符串
             var decompressedString = new TextDecoder().decode(decompressed);
             return decompressedString;
