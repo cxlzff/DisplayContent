@@ -122,9 +122,15 @@
                 var decompressed = pako.inflate(compressed);
             } catch (error) {
                 console.log('pako error:', error);
-                // 不符合pako的字符串，将Uint8Array还原回原文本，再返回
-                var original_content = decodeURIComponent(escape(atob(btoa(String.fromCharCode.apply(null, compressed)))));
-                return original_content
+                try {
+                    // 不符合pako的字符串，将Uint8Array还原回原文本，再返回
+                    var original_content = decodeURIComponent(escape(atob(btoa(String.fromCharCode.apply(null, compressed)))));
+                    return original_content
+                } catch (error) {
+                    console.log('decodeURIComponent error:', error);
+                    // 不符合URI的格式，例如20个1，则返回20个1
+                    return compressedBase64
+                }
             }
             
             // 将Uint8Array转换回字符串
