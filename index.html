@@ -50,6 +50,51 @@
     <div id="loader" class="loader"></div>
     <div id="loadingText" class="loadingText">loading</div>
     <script>
+        function decodeUrlEncodedString(encodedStr) {
+            // 替换常见的URL编码字符
+            const urlEncodedChars = {
+                '%20': ' ', // 空格
+                '%21': '!', // 叹号
+                '%22': '"', // 双引号
+                '%23': '#', // 井号
+                '%24': '$', // 美元符号
+                '%25': '%', // 百分号
+                '%26': '&', // 和号
+                '%27': "'", // 单引号
+                '%28': '(', // 左括号
+                '%29': ')', // 右括号
+                '%2A': '*', // 星号
+                '%2B': '+', // 加号
+                '%2C': ',', // 逗号
+                '%2F': '/', // 斜杠
+                '%3A': ':', // 冒号
+                '%3B': ';', // 分号
+                '%3C': '<', // 小于号
+                '%3D': '=', // 等于号
+                '%3E': '>', // 大于号
+                '%3F': '?', // 问号
+                '%40': '@', // 花号
+                // ... 可以继续添加其他需要的编码
+            };
+
+            // 替换所有已知的URL编码字符
+            return encodedStr.replace(/%[0-9A-F]{2}/gi, function(match) {
+                return urlEncodedChars[match] || match; // 如果没有匹配的编码，则返回原字符
+            });
+        }
+
+        function getBase64ContentFromUrl(url) {
+            // 使用正则表达式匹配 'content' 参数
+            const regex = /(?:\?|&)(content=)([^&]+)/;
+            const match = url.match(regex);
+            if (match && match[2]) {
+                // 替换所有已知的URL编码字符并返回参数content的内容
+                return decodeURIComponent(decodeUrlEncodedString(match[2]))
+                
+            }
+            return null; // 如果没有匹配到，返回 null
+        }
+
         // 压缩字符串
         function compressString(str) {
             // 将字符串转换为Uint8Array
@@ -85,18 +130,6 @@
             // 将Uint8Array转换回字符串
             var decompressedString = new TextDecoder().decode(decompressed);
             return decompressedString;
-        }
-
-        function getBase64ContentFromUrl(url) {
-            // 使用正则表达式匹配 'content' 参数
-            const regex = /(?:\?|&)(content=)([^&]+)/;
-            const match = url.match(regex);
-            if (match && match[2]) {
-                // 将编码的 '+' 替换回原始的 '+' 并且还原url
-                return decodeURIComponent(match[2].replace(/%2B/g, '+'))
-                
-            }
-            return null; // 如果没有匹配到，返回 null
         }
 
         // 显示加载指示器
