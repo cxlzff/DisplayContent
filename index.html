@@ -154,6 +154,7 @@
             showLoader();
 
             const content = getBase64ContentFromUrl(window.location.search);
+            const md = window.markdownit();
             if (content) {
                 // 假设这是从Python端获取的Base64编码的压缩数据
                 var base64EncodedCompressedData = content // 替换为您的Base64字符串
@@ -163,22 +164,20 @@
                 var codeElement = document.createElement('code');
 
                 // 输出解压后的数据
-                var result = decompressString(base64EncodedCompressedData);
+                var markdownText = decompressString(base64EncodedCompressedData);
+                var result = md.render(markdownText);
                 hideLoader();
-                codeElement.innerHTML = result;
-                codeElement.className = 'language-python';
+                codeElement.className = 'language-markdown';
                 preElement.appendChild(codeElement);
                 document.body.appendChild(preElement);
 
                 // 使用Prism手动高亮元素
                 Prism.highlightElement(codeElement);
+                codeElement.innerHTML = result;
             }else{
-                function readme(data) {
-                    const md = window.markdownit();
-                    // 假设这是你想要渲染的 Markdown 文本
-                    const markdownText = data;
-                    // 渲染 Markdown 并将其插入到页面中
-                    const result = md.render(markdownText);
+                function readme(markdownText) {
+                    // 渲染 Markdown
+                    var result = md.render(markdownText);
 
                     // 创建 pre 和 code 元素
                     var preElement = document.createElement('pre');
